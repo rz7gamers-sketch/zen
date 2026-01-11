@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>🙂 Cheer-Up</title>
+<title>Zenith dumbass</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body {
     margin: 0;
@@ -17,273 +18,180 @@ body {
 }
 
 .box {
-    background: #ffffffdd;
+    background: #ffffffee;
     padding: 28px;
-    border-radius: 12px;
-    width: 90%;
+    border-radius: 14px;
+    width: 92%;
     max-width: 420px;
     text-align: center;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
     position: relative;
-    transition: transform 0.2s;
 }
 
 .hidden { display: none; }
 
 button {
-    padding: 12px 20px;
-    margin: 16px 5px 0;
-    border-radius: 10px;
+    padding: 14px 22px;
+    margin: 16px 6px 0;
+    border-radius: 12px;
     border: 1px solid #222;
     background: #fff;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform 0.15s;
 }
-button:hover { transform: scale(1.05); }
 
-img { width: 100%; border-radius: 10px; margin-top: 15px; }
+button:active { transform: scale(0.95); }
 
-.note { font-size: 14px; color: #555; margin-top: 8px; }
+img {
+    width: 100%;
+    border-radius: 12px;
+    margin-top: 15px;
+}
 
-.no-btn { position: absolute; right: 20px; top: 60px; }
+.note {
+    font-size: 14px;
+    color: #555;
+    margin-top: 8px;
+}
 
-.glow { color: black; font-weight: bold; animation: bounce 1s infinite; }
+.no-btn {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+}
 
-@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+.glow {
+    font-weight: 700;
+    animation: bounce 1s infinite;
+}
 
-.emoji { position: absolute; font-size: 20px; pointer-events: none; animation: fall linear infinite; }
-@keyframes fall { 0% { transform: translateY(-30px); } 100% { transform: translateY(100vh); } }
+@keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+.emoji {
+    position: fixed;
+    font-size: 22px;
+    pointer-events: none;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    from { transform: translateY(-30px); }
+    to { transform: translateY(110vh); }
+}
 </style>
 </head>
+
 <body>
 
-<!-- STEP 1 -->
 <div class="box" id="step1">
     <h3>Mood thik hoise <span class="glow">apu</span>?</h3>
-    <button onclick="show('step2')">No</button>
+    <button id="step1No">No</button>
 </div>
 
-<!-- STEP 2 -->
 <div class="box hidden" id="step2">
     <h3>Accha tahole ki kora jay bolen to</h3>
-    <button onclick="show('step3')">Ekta <span class="glow">baddie</span> dekhben?</button>
+    <button id="toStep3">Ekta <span class="glow">baddie</span> dekhben?</button>
 </div>
 
-<!-- STEP 3 -->
 <div class="box hidden" id="step3">
     <img src="her-image.jpg" alt="Baddie">
-    <p>Ei <span class="glow">baddie</span> ke sad dekhle manay na, please hashen?</p>
-
+    <p>Ei <span class="glow">baddie</span> ke sad dekhle manay na</p>
     <input type="file" id="firstSelfie" accept="image/*">
-    <div class="note">Selfie ta na dile website ta r agay jabe na</div>
+    <div class="note">Selfie na dile agay jabe na</div>
 </div>
 
-<!-- STEP 4 -->
 <div class="box hidden" id="step4">
     <h3>Ami ki <span class="glow">Batman</span>?</h3>
-    <button onclick="show('step5')">Yes</button>
+    <button id="yesBtn">Yes</button>
     <button class="no-btn" id="noBtn">No</button>
 </div>
 
-<!-- STEP 5 -->
 <div class="box hidden" id="step5">
-    <h3>Eito good job 😌<br>dekhi abar ektu hashen to</h3>
-
+    <h3>Eito good job 😌<br>abar ektu hashen</h3>
     <input type="file" id="secondSelfie" accept="image/*">
-    <div class="note">Selfie ta na dile website ta shesh hobe na</div>
+    <div class="note">Eta mandatory 😋</div>
 </div>
 
-<!-- FINAL PAGE -->
 <div class="box hidden" id="final">
-    <h3>You know you can still send infinite amount of selfies 😉</h3>
+    <h3>Infinite selfies allowed 😋</h3>
     <input type="file" id="infiniteSelfie" accept="image/*">
-    <div class="note">Send as many selfies as you want 😋</div>
-
-    <h4>Your Selfie Gallery</h4>
-    <div id="gallery" style="display:flex; flex-wrap: wrap;"></div>
+    <h4>Your Gallery</h4>
+    <div id="gallery" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;"></div>
 </div>
-
-
 
 <script>
-// STEP navigation
-function show(id){
+document.addEventListener("DOMContentLoaded", () => {
+
+function show(id) {
     document.querySelectorAll('.box').forEach(b => b.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
+    if (id === 'final') loadGallery();
 }
 
-// Moving No button
-const noBtn = document.getElementById("noBtn");
-noBtn.addEventListener("mouseover", () => {
-    const x = Math.random() * (window.innerWidth - 120);
-    const y = Math.random() * (window.innerHeight - 60);
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
-    shakeBox(document.getElementById('step4'));
+document.getElementById("step1No").addEventListener("click", () => show("step2"));
+document.getElementById("toStep3").addEventListener("click", () => show("step3"));
+document.getElementById("yesBtn").addEventListener("click", () => show("step5"));
+
+document.getElementById("noBtn").addEventListener("mouseover", () => {
+    const btn = document.getElementById("noBtn");
+    btn.style.left = Math.random() * 70 + "%";
+    btn.style.top = Math.random() * 60 + "%";
 });
 
-// Shake animation
-function shakeBox(box){
-    box.style.transform = "translateX(-10px)";
-    setTimeout(()=> box.style.transform = "translateX(10px)",100);
-    setTimeout(()=> box.style.transform = "translateX(0)",200);
-}
+setupUpload("firstSelfie", "step4");
+setupUpload("secondSelfie", "final");
 
-// Selfie upload
-function uploadSelfie(inputId, nextStep){
-    const fileInput = document.getElementById(inputId);
-    fileInput.addEventListener('change', async (e) => {
-        const file = e.target.files[0];
-        const formData = new FormData();
-        formData.append('selfie', file);
+document.getElementById("infiniteSelfie").addEventListener("change", async e => {
+    await uploadFile(e.target.files[0]);
+    triggerEmojiRain();
+    loadGallery();
+    e.target.value = "";
+});
 
-        const res = await fetch('/upload', { method: 'POST', body: formData });
-        const data = await res.json();
-        console.log(data.message);
-
-        show(nextStep);
+async function setupUpload(inputId, nextStep) {
+    document.getElementById(inputId).addEventListener("change", async e => {
+        await uploadFile(e.target.files[0]);
         triggerEmojiRain();
-        if(nextStep==='final') triggerConfetti();
+        show(nextStep);
     });
 }
 
-uploadSelfie('firstSelfie','step4');
-uploadSelfie('secondSelfie','final');
-
-
- // Infinite selfies (final page)
-const infiniteInput = document.getElementById('infiniteSelfie');
-infiniteInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append('selfie', file);
-
-    const res = await fetch('/upload', { method: 'POST', body: formData });
-    const data = await res.json();
-    console.log(data.message);
-
-    // Fun effect for every upload
-    triggerEmojiRain();
-
-    // Reset input so she can upload again
-    infiniteInput.value = '';
-});
-
-const gallery = document.getElementById('gallery');
-
-// Function to add a selfie to gallery
-function addSelfieToGallery(fileName){
-    const img = document.createElement('img');
-    img.src = `/uploads/${fileName}`;
-    img.style.width = '100px';
-    img.style.margin = '5px';
-    img.style.borderRadius = '10px';
-    gallery.appendChild(img);
+async function uploadFile(file) {
+    const fd = new FormData();
+    fd.append("selfie", file);
+    await fetch("/upload", { method: "POST", body: fd });
 }
 
 async function loadGallery() {
-    const gallery = document.getElementById('gallery');
-    gallery.innerHTML = ''; // clear existing
-
-    const res = await fetch('/selfies');
+    const res = await fetch("/selfies");
     const files = await res.json();
-
-    files.forEach(file => {
-        const img = document.createElement('img');
-        img.src = `/uploads/${file}`;
-        img.style.width = '100px';
-        img.style.margin = '5px';
-        img.style.borderRadius = '10px';
-        gallery.appendChild(img);
+    const g = document.getElementById("gallery");
+    g.innerHTML = "";
+    files.forEach(f => {
+        const img = document.createElement("img");
+        img.src = "/uploads/" + f;
+        img.style.width = "90px";
+        img.style.borderRadius = "10px";
+        g.appendChild(img);
     });
 }
 
-// Call this when showing the final page
-function show(id){
-    document.querySelectorAll('.box').forEach(b => b.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
-
-    if(id === 'final') loadGallery(); // load all selfies
-}
-
-
-// Update infinite selfie upload handler
-const infiniteInput = document.getElementById('infiniteSelfie');
-infiniteInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append('selfie', file);
-
-    const res = await fetch('/upload', { method: 'POST', body: formData });
-    const data = await res.json();
-    console.log(data.message);
-
-    // Display the uploaded selfie in gallery
-    addSelfieToGallery(file.name);
-
-    // Fun effect
-    triggerEmojiRain();
-
-    // Clear input
-    infiniteInput.value = '';
-});
-
-async function loadGallery() {
-    const gallery = document.getElementById('gallery');
-    gallery.innerHTML = ''; // clear existing
-
-    const res = await fetch('/selfies');
-    const files = await res.json();
-
-    files.forEach(file => {
-        const img = document.createElement('img');
-        img.src = `/uploads/${file}`;
-        img.style.width = '100px';
-        img.style.margin = '5px';
-        img.style.borderRadius = '10px';
-        gallery.appendChild(img);
-    });
-}
-
-// Call this when showing the final page
-function show(id){
-    document.querySelectorAll('.box').forEach(b => b.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
-
-    if(id === 'final') loadGallery(); // load all selfies
-}
-
-
-
-// Emoji rain
-function triggerEmojiRain(){
-    for(let i=0;i<20;i++){
-        const e = document.createElement('div');
-        e.className='emoji';
-        e.innerText='😋';
-        e.style.left=Math.random()*100+'vw';
-        e.style.animationDuration=2+Math.random()*3+'s';
+function triggerEmojiRain() {
+    for (let i = 0; i < 20; i++) {
+        const e = document.createElement("div");
+        e.className = "emoji";
+        e.innerText = "😋";
+        e.style.left = Math.random() * 100 + "vw";
+        e.style.animationDuration = 2 + Math.random() * 2 + "s";
         document.body.appendChild(e);
-        setTimeout(()=> e.remove(),5000);
+        setTimeout(() => e.remove(), 4000);
     }
 }
 
-// Confetti
-function triggerConfetti(){
-    for(let i=0;i<50;i++){
-        const c = document.createElement('div');
-        c.style.position='absolute';
-        c.style.width='10px';
-        c.style.height='10px';
-        c.style.background=['#ff0','#f0f','#0ff','#0f0','#f00'][Math.floor(Math.random()*5)];
-        c.style.left=Math.random()*100+'vw';
-        c.style.top='0';
-        c.style.borderRadius='50%';
-        c.style.animation='fall 3s linear forwards';
-        document.body.appendChild(c);
-        setTimeout(()=> c.remove(),3000);
-    }
-}
+});
 </script>
 
 </body>
