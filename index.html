@@ -226,6 +226,37 @@
   </div>
 </div>
 
+<div style="margin-top: 48px; padding-top: 32px; border-top: 2px dashed #ffb6c1;">
+  <h3 style="color: var(--deep-pink); text-align: center; margin-bottom: 16px;">
+    little diary for this miss
+  </h3>
+  <p style="text-align:center; color:#555; font-size:0.95rem; margin-bottom:24px; font-style:italic;">
+    Everything you write here is getting podcasted as government propaganda btw
+  </p>
+
+  <!-- Write new entry -->
+  <form id="diaryForm" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; background: #fff0f5; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(255,105,180,0.2);">
+    <textarea 
+      id="diaryContent" 
+      placeholder="dhet blachal" 
+      rows="5"
+      required
+      style="padding: 16px; border: 2px solid #ffe6f2; border-radius: 16px; font-size: 1rem; resize: vertical; font-family: inherit; background: white;"
+    ></textarea>
+
+    <button 
+      type="submit"
+      style="align-self: center; padding: 14px 48px; background: linear-gradient(135deg, #ff69b4, #ff1493); color: white; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(255,20,147,0.4);"
+    >
+      save legit govt propaganda
+    </button>
+  </form>
+
+  <!-- Timeline of entries -->
+  <div id="diaryTimeline" style="display: flex; flex-direction: column; gap: 24px;"></div>
+</div>
+
+
 <script>
 // Simple state management + smooth transitions
 const boxes = document.querySelectorAll('.box');
@@ -323,6 +354,62 @@ async function loadGallery() {
       img.alt = "zenith apur cringe selfie";
       gallery.appendChild(img);
     });
+async function loadDiary() {
+  try {
+    const res = await fetch('/diary');
+    const entries = await res.json();
+
+    const container = document.getElementById('diaryTimeline');
+    container.innerHTML = '';
+
+    if (entries.length === 0) {
+      container.innerHTML = '<p style="text-align:center; color:#888; padding:40px 0;">No entries yet... start writing our little story 💕</p>';
+      return;
+    }
+
+    entries.forEach(entry => {
+      const div = document.createElement('div');
+      div.style.cssText = 'background:white; padding:20px; border-radius:16px; border-left:5px solid var(--deep-pink); box-shadow:0 4px 12px rgba(0,0,0,0.08);';
+      div.innerHTML = `
+        <div style="color:#888; font-size:0.85rem; margin-bottom:8px;">${entry.date}</div>
+        <p style="line-height:1.6; white-space:pre-wrap; color:#333;">${entry.content}</p>
+      `;
+      container.appendChild(div);
+    });
+  } catch (err) {
+    document.getElementById('diaryTimeline').innerHTML = '<p style="color:#ff4757; text-align:center;">Couldn\'t load... but you\'re still my favorite writer 😘</p>';
+  }
+}
+
+// Add to your show() function:
+if (id === 'final') {
+  loadGallery();
+  loadDiary();   // ← loads diary every time final page shows
+}
+
+// Form submit
+document.getElementById('diaryForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const content = document.getElementById('diaryContent').value.trim();
+
+  if (!content) return alert("Write something bitch");
+
+  try {
+    const res = await fetch('/diary', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content })
+    });
+
+    if (res.ok) {
+      document.getElementById('diaryContent').value = '';
+      loadDiary();
+      alert('Saved');
+    }
+  } catch (err) {
+    alert('Oops... try again? ');
+  }
+});
 
     loading.textContent = urls.length === 0 ? "chobi pathao" : "";
   } catch (e) {

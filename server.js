@@ -60,6 +60,72 @@ app.get('/selfies', (req, res) => {
   });
 });
 
+// At the very top, after other requires
+const { MongoClient } = require('mongodb');
+
+const uri = process.env.MONGODB_URI;
+let client;
+let db;
+
+// Connect once on startup
+(async () => {
+  try {
+    client = new MongoClient(uri);
+    await client.connect();
+    db = client.db(); // uses the DB name from URI or default
+    console.log('Connected to MongoDB Atlas');
+  } catch (err) {
+    console.error('MongoDB connection error:', err);
+  }
+})();
+
+// Routes (add/replace these)
+app.get('/diary', async (req, res) => {
+  try {
+    const entries = await db.collection('diary').find().sort({ _id: -1 }).toArray(); // newest first
+    res.json(entries);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not load diary' });
+  }
+});
+
+app.post('/diary', async (req, res) => {
+  const { content } = req.body;
+
+  if (!content?.trim()) {
+    return res.status(400).json({ error: 'Please write something sweet...' });
+  }
+
+  const entry = {
+    content: content.trim(),
+    date: new Date().toLocaleString('en-US', {
+      timeZone: 'Asia/Dhaka',
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }),
+    createdAt: new Date() // for sorting
+  };
+
+  try {
+    await db.collection('diary').insertOne(entry);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to save entry' });
+  }
+});
+
+// Optional: Graceful shutdown (good practice)
+process.on('SIGTERM', async () => {
+  if (client) await client.close();
+  process.exit(0);
+});
+
 // Start server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
