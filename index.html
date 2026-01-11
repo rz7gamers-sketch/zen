@@ -182,19 +182,19 @@
   <!-- All boxes will be shown/hidden with JS -->
   
   <div class="box" id="step1">
-    <h3>Mood thik hoise <span class="glow">apu</span>?</h3>
+    <h3>Mood thik hoyeche <span class="glow">madam?</span>?</h3>
     <button id="step1No">No </button>
   </div>
 
   <div class="box" id="step2">
-    <h3>Accha tahole ki kora jay bolen to…?</h3>
+    <h3>Accha tahole ki kora jay bolen</h3>
     <button id="toStep3">Ekta <span class="glow">baddie</span> dekhben?</button>
   </div>
 
   <div class="box" id="step3">
     <img src="her-image.jpeg" alt="baddie">
     <p>Ei <span class="glow">baddie</span> ke sad dekhle manay na…</p>
-    <label for="firstSelfie" class="file-label">Send your first selfie 💌</label>
+    <label for="firstSelfie" class="file-label">eine click koro</label>
     <input type="file" id="firstSelfie" accept="image/*">
     <div class="note">Selfie na dile agay jabe na</div>
     <div class="loading" id="loading1"></div>
@@ -261,7 +261,7 @@ async function uploadFile(file, loadingElement) {
   if (!file) return;
   
   if (loadingElement) {
-    loadingElement.textContent = "Uploading your pretty face… 💕";
+    loadingElement.textContent = "flatass";
   }
 
   const formData = new FormData();
@@ -276,11 +276,11 @@ async function uploadFile(file, loadingElement) {
     if (!res.ok) throw new Error();
     
     if (loadingElement) {
-      loadingElement.textContent = "Done! You look stunning 😍";
+      loadingElement.textContent = "damn can i bite your cheeks btw";
       setTimeout(() => loadingElement.textContent = "", 2000);
     }
   } catch (e) {
-    alert("Something went wrong... try again? 🥺");
+    alert("jhamela hoise maybe care to try again?");
   }
 }
 
@@ -307,7 +307,7 @@ document.getElementById("infiniteSelfie").onchange = async (e) => {
 // Gallery
 async function loadGallery() {
   const loading = document.getElementById("loadingGallery");
-  loading.textContent = "Loading your beautiful selfies… 💗";
+  loading.textContent = "catwoman";
 
   try {
     const res = await fetch("/selfies");
@@ -320,13 +320,13 @@ async function loadGallery() {
       const img = document.createElement("img");
       img.src = url;
       img.loading = "lazy";
-      img.alt = "Selfie from apu";
+      img.alt = "zenith apur cringe selfie";
       gallery.appendChild(img);
     });
 
-    loading.textContent = urls.length === 0 ? "Send the first one… 🥰" : "";
+    loading.textContent = urls.length === 0 ? "chobi pathao" : "";
   } catch (e) {
-    loading.textContent = "Couldn't load gallery... but you're still cute 😘";
+    loading.textContent = "net e jhamela abar try koro";
   }
 }
 </script>
