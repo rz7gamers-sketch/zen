@@ -1,19 +1,17 @@
 {
   "name": "zen",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "dependencies": {
-    "corepack": "^0.34.5",
-    "express": "^5.2.1",
-    "multer": "^2.0.2",
-    "npm": "^11.6.2"
-  },
+  "description": "Interactive cheer-up website",
+  "main": "server.js",
+  "type": "commonjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "multer": "^2.0.2"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "license": "ISC"
 }
