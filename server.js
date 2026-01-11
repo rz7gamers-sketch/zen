@@ -28,3 +28,14 @@ app.post('/upload', upload.single('selfie'), (req, res) => {
 
 // Start server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Endpoint to send list of uploaded selfies
+app.get('/selfies', (req, res) => {
+    const files = fs.readdirSync(uploadFolder);
+    res.json(files); // send array of filenames
+});
+
+
+// Serve uploads folder so images can be viewed
+app.use('/uploads', express.static(uploadFolder));
+

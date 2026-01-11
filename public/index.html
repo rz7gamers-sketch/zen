@@ -96,7 +96,14 @@ img { width: 100%; border-radius: 10px; margin-top: 15px; }
 <!-- FINAL PAGE -->
 <div class="box hidden" id="final">
     <h3>You know you can still send infinite amount of selfies 😉</h3>
+    <input type="file" id="infiniteSelfie" accept="image/*">
+    <div class="note">Send as many selfies as you want 😋</div>
+
+    <h4>Your Selfie Gallery</h4>
+    <div id="gallery" style="display:flex; flex-wrap: wrap;"></div>
 </div>
+
+
 
 <script>
 // STEP navigation
@@ -142,6 +149,111 @@ function uploadSelfie(inputId, nextStep){
 
 uploadSelfie('firstSelfie','step4');
 uploadSelfie('secondSelfie','final');
+
+
+ // Infinite selfies (final page)
+const infiniteInput = document.getElementById('infiniteSelfie');
+infiniteInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('selfie', file);
+
+    const res = await fetch('/upload', { method: 'POST', body: formData });
+    const data = await res.json();
+    console.log(data.message);
+
+    // Fun effect for every upload
+    triggerEmojiRain();
+
+    // Reset input so she can upload again
+    infiniteInput.value = '';
+});
+
+const gallery = document.getElementById('gallery');
+
+// Function to add a selfie to gallery
+function addSelfieToGallery(fileName){
+    const img = document.createElement('img');
+    img.src = `/uploads/${fileName}`;
+    img.style.width = '100px';
+    img.style.margin = '5px';
+    img.style.borderRadius = '10px';
+    gallery.appendChild(img);
+}
+
+async function loadGallery() {
+    const gallery = document.getElementById('gallery');
+    gallery.innerHTML = ''; // clear existing
+
+    const res = await fetch('/selfies');
+    const files = await res.json();
+
+    files.forEach(file => {
+        const img = document.createElement('img');
+        img.src = `/uploads/${file}`;
+        img.style.width = '100px';
+        img.style.margin = '5px';
+        img.style.borderRadius = '10px';
+        gallery.appendChild(img);
+    });
+}
+
+// Call this when showing the final page
+function show(id){
+    document.querySelectorAll('.box').forEach(b => b.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+
+    if(id === 'final') loadGallery(); // load all selfies
+}
+
+
+// Update infinite selfie upload handler
+const infiniteInput = document.getElementById('infiniteSelfie');
+infiniteInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('selfie', file);
+
+    const res = await fetch('/upload', { method: 'POST', body: formData });
+    const data = await res.json();
+    console.log(data.message);
+
+    // Display the uploaded selfie in gallery
+    addSelfieToGallery(file.name);
+
+    // Fun effect
+    triggerEmojiRain();
+
+    // Clear input
+    infiniteInput.value = '';
+});
+
+async function loadGallery() {
+    const gallery = document.getElementById('gallery');
+    gallery.innerHTML = ''; // clear existing
+
+    const res = await fetch('/selfies');
+    const files = await res.json();
+
+    files.forEach(file => {
+        const img = document.createElement('img');
+        img.src = `/uploads/${file}`;
+        img.style.width = '100px';
+        img.style.margin = '5px';
+        img.style.borderRadius = '10px';
+        gallery.appendChild(img);
+    });
+}
+
+// Call this when showing the final page
+function show(id){
+    document.querySelectorAll('.box').forEach(b => b.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+
+    if(id === 'final') loadGallery(); // load all selfies
+}
+
+
 
 // Emoji rain
 function triggerEmojiRain(){
