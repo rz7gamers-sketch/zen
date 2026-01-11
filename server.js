@@ -1,41 +1,70 @@
-const express = require('express');
-const multer  = require('multer');
-const path = require('path');
-const fs = require('fs');
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
+/* ------------------ PATHS ------------------ */
+const PUBLIC_DIR = path.join(__dirname, "public");
+const UPLOAD_DIR = path.join(__dirname, "uploads");
 
-// Ensure uploads folder exists
-const uploadFolder = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder);
+/* ------------------ STATIC ------------------ */
+app.use(express.static(PUBLIC_DIR));
+app.use("/uploads", express.static(UPLOAD_DIR));
 
-// Multer setup
+/* ------------------ ENSURE UPLOAD DIR ------------------ */
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
+
+/* ------------------ MULTER CONFIG ------------------ */
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => { cb(null, uploadFolder); },
-  filename: (req, file, cb) => { cb(null, Date.now() + path.extname(file.originalname)); }
-});
-const upload = multer({ storage });
-
-// Endpoint for selfie upload
-app.post('/upload', upload.single('selfie'), (req, res) => {
-  console.log('Selfie received:', req.file.path);
-  res.json({ message: 'Selfie received!' });
+  destination: (_, __, cb) => cb(null, UPLOAD_DIR),
+  filename: (_, file, cb) => {
+    const unique =
+      Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, unique + path.extname(file.originalname));
+  },
 });
 
-// Start server
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-// Endpoint to send list of uploaded selfies
-app.get('/selfies', (req, res) => {
-    const files = fs.readdirSync(uploadFolder);
-    res.json(files); // send array of filenames
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  fileFilter: (_, file, cb) => {
+    const allowed = ["image/jpeg", "image/png", "image/webp"];
+    if (!allowed.includes(file.mimetype)) {
+      return cb(new Error("Only images allowed"));
+    }
+    cb(null, true);
+  },
 });
 
+/* ------------------ ROUTES ------------------ */
 
-// Serve uploads folder so images can be viewed
-app.use('/uploads', express.static(uploadFolder));
+// Upload selfie
+app.post("/upload", upload.single("selfie"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
 
+  console.log("Selfie saved:", req.file.filename);
+  res.json({ message: "Selfie received", file: req.file.filename });
+});
+
+// List selfies
+app.get("/selfies", async (req, res) => {
+  try {
+    const files = await fs.promises.readdir(UPLOAD_DIR);
+    res.json(files);
+  } catch (err) {
+    console.error("Gallery error:", err);
+    res.json([]);
+  }
+});
+
+/* ------------------ START SERVER ------------------ */
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});
