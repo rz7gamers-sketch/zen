@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>dumbass zenith er jonno </title>
-  
+  <title>dumbass zenith er jonno</title>
+ 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
+ 
   <style>
     :root {
       --pink: #ff69b4;
@@ -17,13 +17,11 @@
       --white: #ffffff;
       --shadow: 0 10px 30px rgba(255,105,180,0.25);
     }
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       font-family: 'Poppins', system-ui, sans-serif;
       background: linear-gradient(135deg, #fff0f5 0%, #ffe4e9 100%);
@@ -34,13 +32,11 @@
       padding: 20px;
       overflow-x: hidden;
     }
-
     .container {
       width: 100%;
       max-width: 420px;
       position: relative;
     }
-
     .box {
       background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(10px);
@@ -53,13 +49,11 @@
       transform: translateY(20px);
       pointer-events: none;
     }
-
     .box.active {
       opacity: 1;
       transform: translateY(0);
       pointer-events: auto;
     }
-
     h3 {
       font-size: 1.6rem;
       font-weight: 700;
@@ -67,13 +61,11 @@
       margin-bottom: 1.2rem;
       line-height: 1.3;
     }
-
     .glow {
       color: var(--deep-pink);
       font-weight: 700;
       text-shadow: 0 0 10px rgba(255,20,147,0.5);
     }
-
     button {
       font-family: inherit;
       padding: 14px 32px;
@@ -88,16 +80,13 @@
       transition: all 0.3s ease;
       box-shadow: 0 4px 15px rgba(255,105,180,0.4);
     }
-
     button:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 25px rgba(255,105,180,0.5);
     }
-
     button:active {
       transform: scale(0.96);
     }
-
     img {
       width: 100%;
       max-height: 340px;
@@ -106,11 +95,9 @@
       margin: 20px 0;
       box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     }
-
     input[type="file"] {
       display: none;
     }
-
     .file-label {
       display: inline-block;
       padding: 14px 32px;
@@ -122,18 +109,15 @@
       cursor: pointer;
       transition: all 0.3s;
     }
-
     .file-label:hover {
       background: #ffd1e0;
     }
-
     .note {
       font-size: 0.9rem;
       color: #666;
       margin-top: 12px;
       font-style: italic;
     }
-
     .no-btn {
       position: absolute;
       top: 80px;
@@ -142,26 +126,19 @@
       font-size: 1rem;
       background: #666;
     }
-
     .loading {
       font-size: 1.1rem;
       color: var(--deep-pink);
       margin: 20px 0;
       min-height: 1.5em;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
+    .hidden { display: none !important; }
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
       gap: 12px;
       margin-top: 20px;
     }
-
     .gallery img {
       width: 100%;
       aspect-ratio: 1;
@@ -170,7 +147,6 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       transition: transform 0.3s;
     }
-
     .gallery img:hover {
       transform: scale(1.06);
     }
@@ -179,11 +155,9 @@
 <body>
 
 <div class="container">
-  <!-- All boxes will be shown/hidden with JS -->
-  
-  <div class="box" id="step1">
+  <div class="box active" id="step1">
     <h3>Mood thik hoyeche <span class="glow">madam?</span>?</h3>
-    <button id="step1No">No </button>
+    <button id="step1No">No</button>
   </div>
 
   <div class="box" id="step2">
@@ -218,47 +192,48 @@
     <h3>Infinite selfies allowed tho</h3>
     <label for="infiniteSelfie" class="file-label">aro dile eine chap dao</label>
     <input type="file" id="infiniteSelfie" accept="image/*">
-    
+   
     <h4 style="margin: 24px 0 16px; color: var(--deep-pink);">cringe photoshoot</h4>
     <div id="gallery" class="gallery"></div>
-    
-    <div class="loading" id="loadingGallery">dumbass</div>
+    <div class="loading" id="loadingGallery"></div>
+
+    <!-- Diary section - only visible in final step -->
+    <div id="diarySection" class="hidden" style="margin-top: 48px; padding-top: 32px; border-top: 2px dashed #ffb6c1;">
+      <h3 style="color: var(--deep-pink); text-align: center; margin-bottom: 16px;">
+        little diary for this miss
+      </h3>
+      <p style="text-align:center; color:#555; font-size:0.95rem; margin-bottom:24px; font-style:italic;">
+        Everything you write here is getting podcasted as government propaganda btw
+      </p>
+
+      <button id="toggleDiaryBtn" style="display:block; margin:0 auto 20px; padding:12px 32px; background:#ffe6f2; color:var(--deep-pink); border:2px solid var(--deep-pink); border-radius:50px; font-weight:600; cursor:pointer;">
+        Write New Entry
+      </button>
+
+      <form id="diaryForm" class="hidden" style="display:flex; flex-direction:column; gap:16px; margin-bottom:32px; background:#fff0f5; padding:20px; border-radius:20px; box-shadow:0 4px 15px rgba(255,105,180,0.2);">
+        <textarea
+          id="diaryContent"
+          placeholder="dhet blachal"
+          rows="5"
+          required
+          style="padding:16px; border:2px solid #ffe6f2; border-radius:16px; font-size:1rem; resize:vertical; font-family:inherit; background:white;"
+        ></textarea>
+        <div style="display:flex; gap:16px; justify-content:center;">
+          <button type="submit" style="padding:14px 40px; background:linear-gradient(135deg, #ff69b4, #ff1493); color:white; border:none; border-radius:50px; font-size:1.1rem; font-weight:600; cursor:pointer;">
+            save legit govt propaganda
+          </button>
+          <button type="button" id="cancelDiaryBtn" style="padding:14px 40px; background:#eee; color:#666; border:none; border-radius:50px; cursor:pointer;">
+            Cancel
+          </button>
+        </div>
+      </form>
+
+      <div id="diaryTimeline" style="display:flex; flex-direction:column; gap:24px;"></div>
+    </div>
   </div>
 </div>
 
-<div style="margin-top: 48px; padding-top: 32px; border-top: 2px dashed #ffb6c1;">
-  <h3 style="color: var(--deep-pink); text-align: center; margin-bottom: 16px;">
-    little diary for this miss
-  </h3>
-  <p style="text-align:center; color:#555; font-size:0.95rem; margin-bottom:24px; font-style:italic;">
-    Everything you write here is getting podcasted as government propaganda btw
-  </p>
-
-  <!-- Write new entry -->
-  <form id="diaryForm" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; background: #fff0f5; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(255,105,180,0.2);">
-    <textarea 
-      id="diaryContent" 
-      placeholder="dhet blachal" 
-      rows="5"
-      required
-      style="padding: 16px; border: 2px solid #ffe6f2; border-radius: 16px; font-size: 1rem; resize: vertical; font-family: inherit; background: white;"
-    ></textarea>
-
-    <button 
-      type="submit"
-      style="align-self: center; padding: 14px 48px; background: linear-gradient(135deg, #ff69b4, #ff1493); color: white; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(255,20,147,0.4);"
-    >
-      save legit govt propaganda
-    </button>
-  </form>
-
-  <!-- Timeline of entries -->
-  <div id="diaryTimeline" style="display: flex; flex-direction: column; gap: 24px;"></div>
-</div>
-
-
 <script>
-// Simple state management + smooth transitions
 const boxes = document.querySelectorAll('.box');
 
 function show(id) {
@@ -266,11 +241,18 @@ function show(id) {
     box.classList.remove('active');
     box.style.transition = 'all 0.5s ease';
   });
-  
+
   const target = document.getElementById(id);
   if (target) {
     target.classList.add('active');
-    if (id === 'final') loadGallery();
+    
+    if (id === 'final') {
+      loadGallery();
+      loadDiary();
+      document.getElementById('diarySection').classList.remove('hidden');
+    } else {
+      document.getElementById('diarySection')?.classList.add('hidden');
+    }
   }
 }
 
@@ -281,29 +263,21 @@ document.getElementById("step1No").onclick = () => show("step2");
 document.getElementById("toStep3").onclick = () => show("step3");
 document.getElementById("yesBtn").onclick = () => show("step5");
 
-// Funny no button
 document.getElementById("noBtn").onmouseover = function() {
   this.style.left = Math.random() * 70 + "%";
   this.style.top = Math.random() * 60 + "%";
 };
 
-// Upload helpers
+// Upload logic
 async function uploadFile(file, loadingElement) {
   if (!file) return;
+  if (loadingElement) loadingElement.textContent = "flatass";
   
-  if (loadingElement) {
-    loadingElement.textContent = "flatass";
-  }
-
   const formData = new FormData();
   formData.append("selfie", file);
-
+  
   try {
-    const res = await fetch("/upload", {
-      method: "POST",
-      body: formData
-    });
-    
+    const res = await fetch("/upload", { method: "POST", body: formData });
     if (!res.ok) throw new Error();
     
     if (loadingElement) {
@@ -322,12 +296,12 @@ function setupUpload(inputId, nextStep, loadingId) {
   input.onchange = async (e) => {
     await uploadFile(e.target.files[0], loading);
     show(nextStep);
-    e.target.value = ""; // reset input
+    e.target.value = "";
   };
 }
 
-setupUpload("firstSelfie",  "step4",  "loading1");
-setupUpload("secondSelfie","final",  "loading2");
+setupUpload("firstSelfie", "step4", "loading1");
+setupUpload("secondSelfie", "final", "loading2");
 
 document.getElementById("infiniteSelfie").onchange = async (e) => {
   await uploadFile(e.target.files[0], document.getElementById("loadingGallery"));
@@ -339,7 +313,7 @@ document.getElementById("infiniteSelfie").onchange = async (e) => {
 async function loadGallery() {
   const loading = document.getElementById("loadingGallery");
   loading.textContent = "catwoman";
-
+  
   try {
     const res = await fetch("/selfies");
     const urls = await res.json();
@@ -354,19 +328,27 @@ async function loadGallery() {
       img.alt = "zenith apur cringe selfie";
       gallery.appendChild(img);
     });
+    
+    loading.textContent = urls.length === 0 ? "chobi pathao" : "";
+  } catch (e) {
+    loading.textContent = "net e jhamela abar try koro";
+  }
+}
+
+// Diary functions
 async function loadDiary() {
   try {
     const res = await fetch('/diary');
     const entries = await res.json();
-
+    
     const container = document.getElementById('diaryTimeline');
     container.innerHTML = '';
-
+    
     if (entries.length === 0) {
-      container.innerHTML = '<p style="text-align:center; color:#888; padding:40px 0;">No entries yet... start writing our little story 💕</p>';
+      container.innerHTML = '<p style="text-align:center; color:#888; padding:40px 0;">No entries yet</p>';
       return;
     }
-
+    
     entries.forEach(entry => {
       const div = document.createElement('div');
       div.style.cssText = 'background:white; padding:20px; border-radius:16px; border-left:5px solid var(--deep-pink); box-shadow:0 4px 12px rgba(0,0,0,0.08);';
@@ -377,45 +359,52 @@ async function loadDiary() {
       container.appendChild(div);
     });
   } catch (err) {
-    document.getElementById('diaryTimeline').innerHTML = '<p style="color:#ff4757; text-align:center;">Couldn\'t load... but you\'re still my favorite writer 😘</p>';
+    document.getElementById('diaryTimeline').innerHTML = '<p style="color:#ff4757; text-align:center;">Couldn\'t load diary</p>';
   }
 }
 
-// Add to your show() function:
-if (id === 'final') {
-  loadGallery();
-  loadDiary();   // ← loads diary every time final page shows
-}
+// Toggle diary form
+document.getElementById('toggleDiaryBtn')?.addEventListener('click', () => {
+  const form = document.getElementById('diaryForm');
+  form.classList.toggle('hidden');
+  document.getElementById('toggleDiaryBtn').textContent = 
+    form.classList.contains('hidden') ? 'Write New Entry' : 'Close';
+});
 
-// Form submit
-document.getElementById('diaryForm').addEventListener('submit', async (e) => {
+// Cancel
+document.getElementById('cancelDiaryBtn')?.addEventListener('click', () => {
+  document.getElementById('diaryForm').classList.add('hidden');
+  document.getElementById('toggleDiaryBtn').textContent = 'Write New Entry';
+  document.getElementById('diaryContent').value = '';
+});
+
+// Submit diary (no page reload)
+document.getElementById('diaryForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
+  
   const content = document.getElementById('diaryContent').value.trim();
-
   if (!content) return alert("Write something bitch");
-
+  
   try {
     const res = await fetch('/diary', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content })
     });
-
+    
     if (res.ok) {
       document.getElementById('diaryContent').value = '';
-      loadDiary();
+      document.getElementById('diaryForm').classList.add('hidden');
+      document.getElementById('toggleDiaryBtn').textContent = 'Write New Entry';
+      await loadDiary();
       alert('Saved');
+    } else {
+      alert('Failed to save');
     }
   } catch (err) {
-    alert('Oops... try again? ');
+    alert('Oops... try again');
   }
 });
-
-    loading.textContent = urls.length === 0 ? "chobi pathao" : "";
-  } catch (e) {
-    loading.textContent = "net e jhamela abar try koro";
-  }
-}
 </script>
 </body>
 </html>
