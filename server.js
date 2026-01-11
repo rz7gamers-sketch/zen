@@ -4,23 +4,23 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = process.env.PORT || 3000; // ✅ important for Railway
+const PORT = process.env.PORT || 3000;
 
 // Serve static files
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Ensure uploads folder exists
-const uploadFolder = 'uploads';
+const uploadFolder = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder);
 
-// Multer setup for selfies
+// Multer setup
 const storage = multer.diskStorage({
-  destination: (req, file, cb) { cb(null, uploadFolder); },
-  filename: (req, file, cb) { cb(null, Date.now() + path.extname(file.originalname)); }
+  destination: (req, file, cb) => { cb(null, uploadFolder); },
+  filename: (req, file, cb) => { cb(null, Date.now() + path.extname(file.originalname)); }
 });
 const upload = multer({ storage });
 
-// Selfie upload endpoint
+// Endpoint for selfie upload
 app.post('/upload', upload.single('selfie'), (req, res) => {
   console.log('Selfie received:', req.file.path);
   res.json({ message: 'Selfie received!' });
