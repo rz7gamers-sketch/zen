@@ -1,167 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Zenith dumbass</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body {
-    margin: 0;
-    font-family: system-ui, sans-serif;
-    background: linear-gradient(135deg, #ffd6e0, #ffe0b2);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-}
-.box {
-    background: #ffffffee;
-    padding: 28px;
-    border-radius: 14px;
-    width: 92%;
-    max-width: 420px;
-    text-align: center;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-    position: relative;
-}
-.hidden { display: none; }
-button {
-    padding: 14px 22px;
-    margin: 16px 6px 0;
-    border-radius: 12px;
-    border: 1px solid #222;
-    background: #fff;
-    cursor: pointer;
-    transition: transform 0.15s;
-}
-button:active { transform: scale(0.95); }
-img {
-    width: 100%;
-    border-radius: 12px;
-    margin-top: 15px;
-}
-.note {
-    font-size: 14px;
-    color: #555;
-    margin-top: 8px;
-}
-.no-btn {
-    position: absolute;
-    top: 60px;
-    right: 20px;
-}
-.glow {
-    font-weight: 700;
-    animation: bounce 1s infinite;
-}
-@keyframes bounce {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
-}
-.emoji {
-    position: fixed;
-    font-size: 22px;
-    pointer-events: none;
-    animation: fall linear forwards;
-}
-@keyframes fall {
-    from { transform: translateY(-30px); }
-    to { transform: translateY(110vh); }
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Only for my Apu 💕</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --pink: #ff69b4;
+      --deep-pink: #ff1493;
+      --light-pink: #ffe6f2;
+      --white: #ffffff;
+      --shadow: 0 10px 30px rgba(255,105,180,0.25);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', system-ui, sans-serif;
+      background: linear-gradient(135deg, #fff0f5 0%, #ffe4e9 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+    }
+
+    .box {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 32px 24px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: all 0.4s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+    }
+
+    .box.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    h3 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 1.2rem;
+      line-height: 1.3;
+    }
+
+    .glow {
+      color: var(--deep-pink);
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(255,20,147,0.5);
+    }
+
+    button {
+      font-family: inherit;
+      padding: 14px 32px;
+      margin: 12px 8px 4px;
+      border-radius: 50px;
+      border: none;
+      background: var(--pink);
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255,105,180,0.4);
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255,105,180,0.5);
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    img {
+      width: 100%;
+      max-height: 340px;
+      object-fit: cover;
+      border-radius: 20px;
+      margin: 20px 0;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .file-label {
+      display: inline-block;
+      padding: 14px 32px;
+      margin: 16px 0;
+      background: var(--light-pink);
+      color: var(--deep-pink);
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .file-label:hover {
+      background: #ffd1e0;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 12px;
+      font-style: italic;
+    }
+
+    .no-btn {
+      position: absolute;
+      top: 80px;
+      right: 30px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      background: #666;
+    }
+
+    .loading {
+      font-size: 1.1rem;
+      color: var(--deep-pink);
+      margin: 20px 0;
+      min-height: 1.5em;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .gallery img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.06);
+    }
+  </style>
 </head>
 <body>
-<div class="box" id="step1">
+
+<div class="container">
+  <!-- All boxes will be shown/hidden with JS -->
+  
+  <div class="box" id="step1">
     <h3>Mood thik hoise <span class="glow">apu</span>?</h3>
-    <button id="step1No">No</button>
-</div>
-<div class="box hidden" id="step2">
-    <h3>Accha tahole ki kora jay bolen to</h3>
+    <button id="step1No">No </button>
+  </div>
+
+  <div class="box" id="step2">
+    <h3>Accha tahole ki kora jay bolen to…?</h3>
     <button id="toStep3">Ekta <span class="glow">baddie</span> dekhben?</button>
-</div>
-<div class="box hidden" id="step3">
-    <img src="her-image.jpeg" alt="Baddie">
-    <p>Ei <span class="glow">baddie</span> ke sad dekhle manay na</p>
+  </div>
+
+  <div class="box" id="step3">
+    <img src="her-image.jpeg" alt="baddie">
+    <p>Ei <span class="glow">baddie</span> ke sad dekhle manay na…</p>
+    <label for="firstSelfie" class="file-label">Send your first selfie 💌</label>
     <input type="file" id="firstSelfie" accept="image/*">
     <div class="note">Selfie na dile agay jabe na</div>
-</div>
-<div class="box hidden" id="step4">
+    <div class="loading" id="loading1"></div>
+  </div>
+
+  <div class="box" id="step4">
     <h3>Ami ki <span class="glow">Batman</span>?</h3>
-    <button id="yesBtn">Yes</button>
+    <button id="yesBtn">Yes Muhaha</button>
     <button class="no-btn" id="noBtn">No</button>
-</div>
-<div class="box hidden" id="step5">
-    <h3>Eito good job <br>abar ektu hashen dekhi</h3>
+  </div>
+
+  <div class="box" id="step5">
+    <h3>Eito good job! <br>Abar ektu hashen dekhi</h3>
+    <label for="secondSelfie" class="file-label">Beyddop Baddie</label>
     <input type="file" id="secondSelfie" accept="image/*">
-    <div class="note">i need more</div>
-</div>
-<div class="box hidden" id="final">
-    <h3>Infinite selfies allowed 😋</h3>
+    <div class="note">ei koyda diye hobena apu</div>
+    <div class="loading" id="loading2"></div>
+  </div>
+
+  <div class="box" id="final">
+    <h3>Infinite selfies allowed tho💕</h3>
+    <label for="infiniteSelfie" class="file-label">aro dile eine chap dao</label>
     <input type="file" id="infiniteSelfie" accept="image/*">
-    <h4>Your Gallery</h4>
-    <div id="gallery" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;"></div>
+    
+    <h4 style="margin: 24px 0 16px; color: var(--deep-pink);">Our little gallery</h4>
+    <div id="gallery" class="gallery"></div>
+    
+    <div class="loading" id="loadingGallery">Loading your beautiful selfies… 💗</div>
+  </div>
 </div>
+
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+// Simple state management + smooth transitions
+const boxes = document.querySelectorAll('.box');
+
 function show(id) {
-    document.querySelectorAll('.box').forEach(b => b.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
+  boxes.forEach(box => {
+    box.classList.remove('active');
+    box.style.transition = 'all 0.5s ease';
+  });
+  
+  const target = document.getElementById(id);
+  if (target) {
+    target.classList.add('active');
     if (id === 'final') loadGallery();
+  }
 }
-document.getElementById("step1No").addEventListener("click", () => show("step2"));
-document.getElementById("toStep3").addEventListener("click", () => show("step3"));
-document.getElementById("yesBtn").addEventListener("click", () => show("step5"));
-document.getElementById("noBtn").addEventListener("mouseover", () => {
-    const btn = document.getElementById("noBtn");
-    btn.style.left = Math.random() * 70 + "%";
-    btn.style.top = Math.random() * 60 + "%";
-});
-setupUpload("firstSelfie", "step4");
-setupUpload("secondSelfie", "final");
-document.getElementById("infiniteSelfie").addEventListener("change", async e => {
-    await uploadFile(e.target.files[0]);
-    triggerEmojiRain();
-    loadGallery();
-    e.target.value = "";
-});
-async function setupUpload(inputId, nextStep) {
-    document.getElementById(inputId).addEventListener("change", async e => {
-        await uploadFile(e.target.files[0]);
-        triggerEmojiRain();
-        show(nextStep);
+
+// Initial show
+show('step1');
+
+document.getElementById("step1No").onclick = () => show("step2");
+document.getElementById("toStep3").onclick = () => show("step3");
+document.getElementById("yesBtn").onclick = () => show("step5");
+
+// Funny no button
+document.getElementById("noBtn").onmouseover = function() {
+  this.style.left = Math.random() * 70 + "%";
+  this.style.top = Math.random() * 60 + "%";
+};
+
+// Upload helpers
+async function uploadFile(file, loadingElement) {
+  if (!file) return;
+  
+  if (loadingElement) {
+    loadingElement.textContent = "Uploading your pretty face… 💕";
+  }
+
+  const formData = new FormData();
+  formData.append("selfie", file);
+
+  try {
+    const res = await fetch("/upload", {
+      method: "POST",
+      body: formData
     });
+    
+    if (!res.ok) throw new Error();
+    
+    if (loadingElement) {
+      loadingElement.textContent = "Done! You look stunning 😍";
+      setTimeout(() => loadingElement.textContent = "", 2000);
+    }
+  } catch (e) {
+    alert("Something went wrong... try again? 🥺");
+  }
 }
-async function uploadFile(file) {
-    const fd = new FormData();
-    fd.append("selfie", file);
-    await fetch("/upload", { method: "POST", body: fd });
+
+function setupUpload(inputId, nextStep, loadingId) {
+  const input = document.getElementById(inputId);
+  const loading = document.getElementById(loadingId);
+  
+  input.onchange = async (e) => {
+    await uploadFile(e.target.files[0], loading);
+    show(nextStep);
+    e.target.value = ""; // reset input
+  };
 }
+
+setupUpload("firstSelfie",  "step4",  "loading1");
+setupUpload("secondSelfie","final",  "loading2");
+
+document.getElementById("infiniteSelfie").onchange = async (e) => {
+  await uploadFile(e.target.files[0], document.getElementById("loadingGallery"));
+  loadGallery();
+  e.target.value = "";
+};
+
+// Gallery
 async function loadGallery() {
+  const loading = document.getElementById("loadingGallery");
+  loading.textContent = "Loading your beautiful selfies… 💗";
+
+  try {
     const res = await fetch("/selfies");
     const urls = await res.json();
-    const g = document.getElementById("gallery");
-    g.innerHTML = "";
+    
+    const gallery = document.getElementById("gallery");
+    gallery.innerHTML = "";
+    
     urls.forEach(url => {
-        const img = document.createElement("img");
-        img.src = url;
-        img.style.width = "90px";
-        img.style.borderRadius = "10px";
-        g.appendChild(img);
+      const img = document.createElement("img");
+      img.src = url;
+      img.loading = "lazy";
+      img.alt = "Selfie from apu";
+      gallery.appendChild(img);
     });
+
+    loading.textContent = urls.length === 0 ? "Send the first one… 🥰" : "";
+  } catch (e) {
+    loading.textContent = "Couldn't load gallery... but you're still cute 😘";
+  }
 }
-function triggerEmojiRain() {
-    for (let i = 0; i < 20; i++) {
-        const e = document.createElement("div");
-        e.className = "emoji";
-        e.innerText = "😋";
-        e.style.left = Math.random() * 100 + "vw";
-        e.style.animationDuration = 2 + Math.random() * 2 + "s";
-        document.body.appendChild(e);
-        setTimeout(() => e.remove(), 4000);
-    }
-}
-});
 </script>
 </body>
 </html>
