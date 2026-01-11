@@ -1,70 +1,66 @@
-const express = require("express");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+const express = require('express');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
-/* ------------------ PATHS ------------------ */
-const PUBLIC_DIR = path.join(__dirname, "public");
-const UPLOAD_DIR = path.join(__dirname, "uploads");
-
-/* ------------------ STATIC ------------------ */
-app.use(express.static(PUBLIC_DIR));
-app.use("/uploads", express.static(UPLOAD_DIR));
-
-/* ------------------ ENSURE UPLOAD DIR ------------------ */
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-}
-
-/* ------------------ MULTER CONFIG ------------------ */
-const storage = multer.diskStorage({
-  destination: (_, __, cb) => cb(null, UPLOAD_DIR),
-  filename: (_, file, cb) => {
-    const unique =
-      Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, unique + path.extname(file.originalname));
-  },
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-const upload = multer({
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-  fileFilter: (_, file, cb) => {
-    const allowed = ["image/jpeg", "image/png", "image/webp"];
-    if (!allowed.includes(file.mimetype)) {
-      return cb(new Error("Only images allowed"));
-    }
-    cb(null, true);
-  },
-});
-
-/* ------------------ ROUTES ------------------ */
-
-// Upload selfie
-app.post("/upload", upload.single("selfie"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "No file uploaded" });
-  }
-
-  console.log("Selfie saved:", req.file.filename);
-  res.json({ message: "Selfie received", file: req.file.filename });
-});
-
-// List selfies
-app.get("/selfies", async (req, res) => {
-  try {
-    const files = await fs.promises.readdir(UPLOAD_DIR);
-    res.json(files);
-  } catch (err) {
-    console.error("Gallery error:", err);
-    res.json([]);
+// Set up Cloudinary storage for Multer
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'zenith-selfies', // All uploads go into this folder on Cloudinary
+    allowed_formats: ['jpg', 'jpeg', 'png'] // Restrict to images
   }
 });
 
-/* ------------------ START SERVER ------------------ */
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+const upload = multer({ storage });
+
+// Serve static files (e.g., her-image.jpeg)
+app.use(express.static(__dirname));
+
+// Serve index.html at root
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Handle file upload
+app.post('/upload', upload.single('selfie'), (req, res) => {
+  if (req.file) {
+    // File uploaded successfully to Cloudinary
+    res.sendStatus(200);
+  } else {
+    res.status(400).send('Upload failed');
+  }
+});
+
+// Get list of selfie URLs
+app.get('/selfies', (req, res) => {
+  cloudinary.api.resources({
+    type: 'upload',
+    prefix: 'zenith-selfies/', // Fetch only from this folder
+    max_results: 100 // Adjust if you expect more
+  })
+  .then(result => {
+    const urls = result.resources.map(resource => resource.secure_url);
+    res.json(urls);
+  })
+  .catch(error => {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch selfies' });
+  });
+});
+
+// Start server
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });

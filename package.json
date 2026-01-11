@@ -8,7 +8,20 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "cloudinary": "^1.41.3",
     "express": "^5.2.1",
-    "multer": "^2.0.2"
-  }
+    "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rz7gamers-sketch/zen.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rz7gamers-sketch/zen/issues"
+  },
+  "homepage": "https://github.com/rz7gamers-sketch/zen#readme"
 }
