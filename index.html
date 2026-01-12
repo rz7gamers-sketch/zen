@@ -157,38 +157,44 @@
     <h3>Mood thik hoyeche <span class="glow">madam?</span>?</h3>
     <button id="step1No">No</button>
   </div>
+
   <div class="box" id="step2">
     <h3>Accha tahole ki kora jay bolen</h3>
     <button id="toStep3">Ekta <span class="glow">baddie</span> dekhben?</button>
   </div>
+
   <div class="box" id="step3">
     <img src="her-image.jpeg" alt="baddie">
     <p>Ei <span class="glow">baddie</span> ke sad dekhle manay na…</p>
     <label for="firstSelfie" class="file-label">eine click koro</label>
-    <input type="file" id="firstSelfie" accept="image/*">
+    <input type="file" id="firstSelfie" accept="image/*" capture="user">
     <div class="note">Selfie na dile agay jabe na</div>
     <div class="loading" id="loading1"></div>
   </div>
+
   <div class="box" id="step4">
     <h3>Ami ki <span class="glow">Batman</span>?</h3>
     <button id="yesBtn">Yes Muhaha</button>
     <button class="no-btn" id="noBtn">No</button>
   </div>
+
   <div class="box" id="step5">
     <h3>Eito good job! <br>Abar ektu hashen dekhi</h3>
-    <label for="secondSelfie" class="file-label">Beyddop Baddie</label>
-    <input type="file" id="secondSelfie" accept="image/*">
+    <label for="secondSelfie" class="file-label">Beyddop Baddie </label>
+    <input type="file" id="secondSelfie" accept="image/*" capture="user">
     <div class="note">ei koyda diye hobena madam</div>
     <div class="loading" id="loading2"></div>
   </div>
+
   <div class="box" id="final">
     <h3>Infinite selfies allowed tho</h3>
     <label for="infiniteSelfie" class="file-label">aro dile eine chap dao</label>
-    <input type="file" id="infiniteSelfie" accept="image/*">
-  
+    <input type="file" id="infiniteSelfie" accept="image/*" capture="user">
+
     <h4 style="margin: 24px 0 16px; color: var(--deep-pink);">cringe photoshoot</h4>
     <div id="gallery" class="gallery"></div>
     <div class="loading" id="loadingGallery"></div>
+
     <!-- Diary section - only visible in final step -->
     <div id="diarySection" class="hidden" style="margin-top: 48px; padding-top: 32px; border-top: 2px dashed #ffb6c1;">
       <h3 style="color: var(--deep-pink); text-align: center; margin-bottom: 16px;">
@@ -248,7 +254,6 @@ function show(id) {
   }
 }
 
-// Skip to final if ?admin or ?skip=true is in URL
 if (isAdmin) {
   show('final');
 } else {
@@ -264,7 +269,6 @@ document.getElementById("noBtn").onmouseover = function() {
   this.style.top = Math.random() * 60 + "%";
 };
 
-// Upload logic
 async function uploadFile(file, loadingElement) {
   if (!file) return;
   if (loadingElement) loadingElement.textContent = "flatass";
@@ -305,7 +309,6 @@ document.getElementById("infiniteSelfie").onchange = async (e) => {
   e.target.value = "";
 };
 
-// Gallery
 async function loadGallery() {
   const loading = document.getElementById("loadingGallery");
   loading.textContent = "catwoman";
@@ -331,7 +334,6 @@ async function loadGallery() {
   }
 }
 
-// Diary functions
 async function loadDiary() {
   try {
     const res = await fetch('/diary');
@@ -359,7 +361,6 @@ async function loadDiary() {
   }
 }
 
-// Toggle diary form
 document.getElementById('toggleDiaryBtn')?.addEventListener('click', () => {
   const form = document.getElementById('diaryForm');
   form.classList.toggle('hidden');
@@ -367,14 +368,12 @@ document.getElementById('toggleDiaryBtn')?.addEventListener('click', () => {
     form.classList.contains('hidden') ? 'Write New Entry' : 'Close';
 });
 
-// Cancel
 document.getElementById('cancelDiaryBtn')?.addEventListener('click', () => {
   document.getElementById('diaryForm').classList.add('hidden');
   document.getElementById('toggleDiaryBtn').textContent = 'Write New Entry';
   document.getElementById('diaryContent').value = '';
 });
 
-// Submit diary (no page reload)
 document.getElementById('diaryForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
  
