@@ -26,7 +26,7 @@
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;  /* restored original centering */
       padding: 20px;
       overflow-y: auto;
       scroll-behavior: smooth;
@@ -125,8 +125,8 @@
     }
     .hidden { display: none !important; }
     .gallery {
-      display: flex;
-      flex-direction: column-reverse;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
       gap: 12px;
       margin-top: 20px;
     }
@@ -147,7 +147,7 @@
 
 <div class="container">
   <div id="mainBox">
-    <!-- Content loaded here -->
+    <!-- All steps load here -->
   </div>
 </div>
 
@@ -157,7 +157,6 @@ const isAdmin = urlParams.has('admin') || urlParams.get('skip') === 'true';
 
 const mainBox = document.getElementById('mainBox');
 
-// Step templates
 const stepTemplates = {
   step1: `
     <h3>Mood thik hoyeche <span class="glow">madam?</span>?</h3>
@@ -192,11 +191,13 @@ const stepTemplates = {
     <label for="infiniteSelfie" class="file-label">aro dile eine chap dao</label>
     <input type="file" id="infiniteSelfie" accept="image/*">
 
+    <button id="toDiary" style="margin: 20px auto; display: block; padding: 14px 40px; background: #ffe6f2; color: var(--deep-pink); border: 2px solid var(--deep-pink); border-radius: 50px; font-weight: 600; cursor: pointer;">
+      View Diary
+    </button>
+
     <h4 style="margin: 24px 0 16px; color: var(--deep-pink);">cringe photoshoot</h4>
     <div id="gallery" class="gallery"></div>
     <div class="loading" id="loadingGallery"></div>
-
-    <button id="toDiary" style="margin-top: 32px;">View Diary</button>
   `,
   diary: `
     <h3 style="color: var(--deep-pink); text-align: center; margin-bottom: 16px;">
@@ -236,7 +237,7 @@ function show(stepId) {
 
   mainBox.innerHTML = stepTemplates[stepId];
 
-  // Re-attach listeners based on current step
+  // Re-attach event listeners
   if (stepId === 'step1') {
     document.getElementById('step1No')?.addEventListener('click', () => show('step2'));
   } else if (stepId === 'step2') {
@@ -315,7 +316,6 @@ function show(stepId) {
     loadDiary();
   }
 
-  // Always reset scroll
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
@@ -356,7 +356,7 @@ function setupUpload(inputId, nextStep, loadingId) {
   }
 }
 
-// Gallery & Diary loaders
+// Gallery loader with reverse (recent first)
 async function loadGallery() {
   const loading = document.getElementById("loadingGallery");
   if (!loading) return;
@@ -370,7 +370,7 @@ async function loadGallery() {
     if (!gallery) return;
     gallery.innerHTML = "";
 
-    urls.reverse();
+    urls.reverse();  // newest first
 
     urls.forEach(url => {
       const img = document.createElement("img");
@@ -386,6 +386,7 @@ async function loadGallery() {
   }
 }
 
+// Diary loader
 async function loadDiary() {
   const container = document.getElementById('diaryTimeline');
   if (!container) return;
