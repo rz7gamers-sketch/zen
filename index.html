@@ -4,11 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>dumbass zenith er jonno</title>
- 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
- 
   <style>
     :root {
       --pink: #ff69b4;
@@ -155,16 +153,14 @@
 <body>
 
 <div class="container">
-  <div class="box active" id="step1">
+  <div class="box" id="step1">
     <h3>Mood thik hoyeche <span class="glow">madam?</span>?</h3>
     <button id="step1No">No</button>
   </div>
-
   <div class="box" id="step2">
     <h3>Accha tahole ki kora jay bolen</h3>
     <button id="toStep3">Ekta <span class="glow">baddie</span> dekhben?</button>
   </div>
-
   <div class="box" id="step3">
     <img src="her-image.jpeg" alt="baddie">
     <p>Ei <span class="glow">baddie</span> ke sad dekhle manay na…</p>
@@ -173,13 +169,11 @@
     <div class="note">Selfie na dile agay jabe na</div>
     <div class="loading" id="loading1"></div>
   </div>
-
   <div class="box" id="step4">
     <h3>Ami ki <span class="glow">Batman</span>?</h3>
     <button id="yesBtn">Yes Muhaha</button>
     <button class="no-btn" id="noBtn">No</button>
   </div>
-
   <div class="box" id="step5">
     <h3>Eito good job! <br>Abar ektu hashen dekhi</h3>
     <label for="secondSelfie" class="file-label">Beyddop Baddie</label>
@@ -187,16 +181,14 @@
     <div class="note">ei koyda diye hobena madam</div>
     <div class="loading" id="loading2"></div>
   </div>
-
   <div class="box" id="final">
     <h3>Infinite selfies allowed tho</h3>
     <label for="infiniteSelfie" class="file-label">aro dile eine chap dao</label>
     <input type="file" id="infiniteSelfie" accept="image/*">
-   
+  
     <h4 style="margin: 24px 0 16px; color: var(--deep-pink);">cringe photoshoot</h4>
     <div id="gallery" class="gallery"></div>
     <div class="loading" id="loadingGallery"></div>
-
     <!-- Diary section - only visible in final step -->
     <div id="diarySection" class="hidden" style="margin-top: 48px; padding-top: 32px; border-top: 2px dashed #ffb6c1;">
       <h3 style="color: var(--deep-pink); text-align: center; margin-bottom: 16px;">
@@ -205,11 +197,9 @@
       <p style="text-align:center; color:#555; font-size:0.95rem; margin-bottom:24px; font-style:italic;">
         Everything you write here is getting podcasted as government propaganda btw
       </p>
-
       <button id="toggleDiaryBtn" style="display:block; margin:0 auto 20px; padding:12px 32px; background:#ffe6f2; color:var(--deep-pink); border:2px solid var(--deep-pink); border-radius:50px; font-weight:600; cursor:pointer;">
         Write New Entry
       </button>
-
       <form id="diaryForm" class="hidden" style="display:flex; flex-direction:column; gap:16px; margin-bottom:32px; background:#fff0f5; padding:20px; border-radius:20px; box-shadow:0 4px 15px rgba(255,105,180,0.2);">
         <textarea
           id="diaryContent"
@@ -227,13 +217,15 @@
           </button>
         </div>
       </form>
-
       <div id="diaryTimeline" style="display:flex; flex-direction:column; gap:24px;"></div>
     </div>
   </div>
 </div>
 
 <script>
+const urlParams = new URLSearchParams(window.location.search);
+const isAdmin = urlParams.has('admin') || urlParams.get('skip') === 'true';
+
 const boxes = document.querySelectorAll('.box');
 
 function show(id) {
@@ -256,8 +248,12 @@ function show(id) {
   }
 }
 
-// Initial show
-show('step1');
+// Skip to final if ?admin or ?skip=true is in URL
+if (isAdmin) {
+  show('final');
+} else {
+  show('step1');
+}
 
 document.getElementById("step1No").onclick = () => show("step2");
 document.getElementById("toStep3").onclick = () => show("step3");
@@ -272,14 +268,14 @@ document.getElementById("noBtn").onmouseover = function() {
 async function uploadFile(file, loadingElement) {
   if (!file) return;
   if (loadingElement) loadingElement.textContent = "flatass";
-  
+ 
   const formData = new FormData();
   formData.append("selfie", file);
-  
+ 
   try {
     const res = await fetch("/upload", { method: "POST", body: formData });
     if (!res.ok) throw new Error();
-    
+   
     if (loadingElement) {
       loadingElement.textContent = "damn can i bite your cheeks btw";
       setTimeout(() => loadingElement.textContent = "", 2000);
@@ -292,7 +288,7 @@ async function uploadFile(file, loadingElement) {
 function setupUpload(inputId, nextStep, loadingId) {
   const input = document.getElementById(inputId);
   const loading = document.getElementById(loadingId);
-  
+ 
   input.onchange = async (e) => {
     await uploadFile(e.target.files[0], loading);
     show(nextStep);
@@ -313,14 +309,14 @@ document.getElementById("infiniteSelfie").onchange = async (e) => {
 async function loadGallery() {
   const loading = document.getElementById("loadingGallery");
   loading.textContent = "catwoman";
-  
+ 
   try {
     const res = await fetch("/selfies");
     const urls = await res.json();
-    
+   
     const gallery = document.getElementById("gallery");
     gallery.innerHTML = "";
-    
+   
     urls.forEach(url => {
       const img = document.createElement("img");
       img.src = url;
@@ -328,7 +324,7 @@ async function loadGallery() {
       img.alt = "zenith apur cringe selfie";
       gallery.appendChild(img);
     });
-    
+   
     loading.textContent = urls.length === 0 ? "chobi pathao" : "";
   } catch (e) {
     loading.textContent = "net e jhamela abar try koro";
@@ -340,15 +336,15 @@ async function loadDiary() {
   try {
     const res = await fetch('/diary');
     const entries = await res.json();
-    
+   
     const container = document.getElementById('diaryTimeline');
     container.innerHTML = '';
-    
+   
     if (entries.length === 0) {
       container.innerHTML = '<p style="text-align:center; color:#888; padding:40px 0;">No entries yet</p>';
       return;
     }
-    
+   
     entries.forEach(entry => {
       const div = document.createElement('div');
       div.style.cssText = 'background:white; padding:20px; border-radius:16px; border-left:5px solid var(--deep-pink); box-shadow:0 4px 12px rgba(0,0,0,0.08);';
@@ -367,7 +363,7 @@ async function loadDiary() {
 document.getElementById('toggleDiaryBtn')?.addEventListener('click', () => {
   const form = document.getElementById('diaryForm');
   form.classList.toggle('hidden');
-  document.getElementById('toggleDiaryBtn').textContent = 
+  document.getElementById('toggleDiaryBtn').textContent =
     form.classList.contains('hidden') ? 'Write New Entry' : 'Close';
 });
 
@@ -381,17 +377,17 @@ document.getElementById('cancelDiaryBtn')?.addEventListener('click', () => {
 // Submit diary (no page reload)
 document.getElementById('diaryForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  
+ 
   const content = document.getElementById('diaryContent').value.trim();
   if (!content) return alert("Write something bitch");
-  
+ 
   try {
     const res = await fetch('/diary', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content })
     });
-    
+   
     if (res.ok) {
       document.getElementById('diaryContent').value = '';
       document.getElementById('diaryForm').classList.add('hidden');
